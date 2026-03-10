@@ -1,5 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import store from '@/store';
+
+import Catalog from '@/views/Catalog.vue';
+import Login from '@/views/Login.vue';
+import Register from '@/views/Register.vue';
+import CartView from '@/views/CartView.vue';
+import Orders from '@/views/Orders.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [],
@@ -26,18 +34,31 @@ const ifAuthenticated = (to, from, next) => {
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: function () {
-      return import('../views/HomeView.vue');
-    },
-    beforeEnter: ifAuthenticated,
+    name: 'Catalog',
+    component: Catalog
   },
   {
     path: '/login',
-    name: 'login',
-    component: function () {
-      return import('../components/Login.vue');
-    },
-    beforeEnter: ifNotAuthenticated,
+    name: 'Login',
+    component: Login,
+    beforeEnter: ifNotAuthenticated
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    beforeEnter: ifNotAuthenticated
+  },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: CartView,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: Orders,
+    beforeEnter: ifAuthenticated
   }
 ]
