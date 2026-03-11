@@ -1,5 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
-
+import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store';
 
 import Catalog from '@/views/Catalog.vue';
@@ -8,27 +7,18 @@ import Register from '@/views/Register.vue';
 import CartView from '@/views/CartView.vue';
 import Orders from '@/views/Orders.vue';
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [],
-})
-
-export default router
-
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
-    next();
-    return;
+    return next();
   }
-  next('/');
+  return next('/');
 };
 
 const ifAuthenticated = (to, from, next) => {
   if (store.getters.isAuthenticated) {
-    next();
-    return;
+    return next();
   }
-  next('/login');
+  return next('/login');
 };
 
 const routes = [
@@ -61,4 +51,11 @@ const routes = [
     component: Orders,
     beforeEnter: ifAuthenticated
   }
-]
+];
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes
+});
+
+export default router;
