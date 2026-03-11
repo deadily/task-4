@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div id="app">
     <router-view />
@@ -27,3 +28,16 @@ body {
   min-height: 100vh;
 }
 </style>
+=======
+<template>
+  <div id="app">
+    <router-view />
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App'
+};
+</script>
+>>>>>>> c31032b843f1248faf391c98763a54d46ecf6651

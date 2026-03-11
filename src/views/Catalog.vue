@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="catalog">
     <header class="catalog-header">
@@ -152,4 +153,113 @@ export default {
     }
   }
 };
+=======
+<template>
+  <div class="catalog">
+    <header class="catalog-header">
+      <h1>Каталог товаров</h1>
+      <nav>
+        <template v-if="!isAuthenticated">
+          <router-link to="/login" class="btn btn-primary">Войти</router-link>
+          <router-link to="/register" class="btn btn-secondary">Регистрация</router-link>
+        </template>
+        <template v-else>
+          <router-link to="/orders" class="btn btn-secondary">Мои заказы</router-link>
+          <router-link to="/cart" class="btn btn-success">
+            Корзина
+            <span v-if="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+          </router-link>
+          <button @click="handleLogout" class="btn btn-danger">Выйти</button>
+        </template>
+      </nav>
+    </header>
+
+    <div v-if="loading" class="loading">
+      <p>Загрузка товаров...</p>
+    </div>
+
+    <div v-else-if="error" class="error">
+      <p>{{ error }}</p>
+      <button @click="loadProducts" class="btn btn-primary">Повторить</button>
+    </div>
+
+    <div v-else class="products-grid">
+      <div v-for="product in products" :key="product.id" class="product-card">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-description">{{ product.description }}</p>
+        <p class="product-price">{{ product.price }} ₽</p>
+        <button 
+          v-if="isAuthenticated" 
+          @click="handleAddToCart(product.id)"
+          class="btn btn-primary btn-add-to-cart"
+        >
+          В корзину
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+
+export default {
+  name: 'Catalog',
+  
+  data() {
+    return {
+      loading: false,
+      error: null
+    };
+  },
+
+  computed: {
+    ...mapGetters(['isAuthenticated', 'getProducts', 'getCart']),
+    
+    products() {
+      return this.getProducts;
+    },
+
+    cartCount() {
+      return this.getCart.length;
+    }
+  },
+
+  async created() {
+    await this.loadProducts();
+  },
+
+  methods: {
+    ...mapActions(['fetchProducts', 'addToCart', 'logout']),
+
+    async loadProducts() {
+      this.loading = true;
+      this.error = null;
+      try {
+        await this.fetchProducts();
+      } catch (error) {
+        this.error = 'Ошибка при загрузке товаров. Попробуйте позже.';
+        console.error('Error loading products:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async handleAddToCart(productId) {
+      try {
+        await this.addToCart(productId);
+        alert('Товар добавлен в корзину!');
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Ошибка при добавлении товара в корзину');
+      }
+    },
+
+    async handleLogout() {
+      await this.logout();
+      this.$router.push('/');
+    }
+  }
+};
+>>>>>>> c31032b843f1248faf391c98763a54d46ecf6651
 </script>
